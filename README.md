@@ -7,9 +7,9 @@
 ## [demo.do.prometheus.io](https://demo.do.prometheus.io)
 
 This repository provides a demo site for [prometheus](https://github.com/prometheus/prometheus), [alertmanager](https://github.com/prometheus/alertmanager), prometheus exporters, and [grafana](https://github.com/grafana/grafana).
-Site is provisioned with ansible running every day and on all commits to master branch. Everything is fully automated with travis ci pipeline. If you want to check `ansible-playbook` output, go to [last build](https://travis-ci.org/prometheus/demo-site).
+The site is provisioned with Ansible running every day and on all commits to the master branch. Everything is fully automated with a Travis CI pipeline. If you want to check the `ansible-playbook` output, go to the [last build](https://travis-ci.org/prometheus/demo-site).
 
-Have a look at configuration files in [group_vars/](group_vars).
+Have a look at configuration files in the [group_vars/](group_vars/) directory.
 
 ## Applications
 
@@ -24,49 +24,49 @@ All applications should be running on their default ports.
 
 ## Important notice
 
-Before running, golang is required to be installed on deployer machine (necessary to install random_exporter).
+Before running, Go (golang) is required to be installed on the deployer machine (necessary to install random_exporter).
 
-Most services can be accessed in two ways (links in [Applications](#Applications) section. As an example, prometheus can be accessed via:
+Most services can be accessed in two ways (links in [Applications](#applications) section). As an example, prometheus can be accessed via:
   - **http**://demo.do.prometheus.io:9090 - default way
-  - **https**://prometheus.do.prometheus.io - workaround which in background communicates with prometheus via insecure, "default" channel mentioned above
+  - **https**://prometheus.demo.do.prometheus.io - workaround which in the background communicates with Prometheus via insecure, "default" channel mentioned above
 
 This workaround was needed to solve issue [cloudalchemy/demo-site#13](https://github.com/cloudalchemy/demo-site/issues/13).
 
 ## Run yourself
 
-You can easily run such setup yourself without much knowledge how any part of this works. You just need to do two things:
+You can easily run this setup yourself without much knowledge of how any part of this works. You just need to follow these steps:
 
-#### Change ansible inventory
+#### 1. Change Ansible inventory
 
-First of all you need to configure your inventory, ours is located in [`hosts`](hosts) file. Here you set up your target hosts by changing value of `ansible_host` variable. Also here you can exclude parts of this demo site, so if you don't need our website, you just remove this part:
+First of all, you need to configure your inventory, ours is located in the [`hosts`](hosts) file. Here you set up your target hosts by changing the value of the `ansible_host` variable. Also, here you can exclude parts of this demo site. For example, if you don't need our website, you can just remove this part:
 
-```
+```ini
 [web]
 demo
 ```
 
-Accordingly you can exclude grafana, prometheus.
+Similarly, you can exclude Grafana, Prometheus, or other components as needed.
 
-#### Change passwords
+#### 2. Change passwords
 
-For security measures we encrypted some of our passwords, but it is easy to use yours! You can do it by replacing a file located at [`group_vars/grafana/vault`](group_vars/grafana/vault) with following content:
+For security measures, we encrypted some of our passwords, but it's easy to use your own! You can do it by replacing the file located at [`group_vars/grafana/vault`](group_vars/grafana/vault) with the following content:
 
-```
+```yaml
 vault_grafana_password: <<INSERT_YOUR_GRAFANA_PASSWORD>>
 ```
 
-#### Download the 'random' exporter binary
+#### 3. Download the 'random' exporter binary
 
-You will have to manually run `go` command to download & copy the [`random`](https://github.com/prometheus/client_golang/tree/master/examples/random) exporter binary to [`playbooks/files`](playbooks/files) directory.
+You will have to manually run the `go` command to download & copy the [`random`](https://github.com/prometheus/client_golang/tree/master/examples/random) exporter binary to the [`playbooks/files`](playbooks/files) directory.
 
-- The binary will be downloaded at `GOPATH` location. The value of `GOPATH` can be found by running `go env|grep GOPATH` command on your system.
+- The binary will be downloaded at the `GOPATH` location. The value of `GOPATH` can be found by running the `go env | grep GOPATH` command on your system.
 
-```
+```bash
 go get -u github.com/prometheus/client_golang/examples/random
 cp <GOPATH>/bin/random /path/to/demo-site/playbooks/files/
 ```
 
-#### Run as usual Ansible playbook
+#### 4. Run as usual Ansible playbook
 
 ```bash
 # Download roles
@@ -78,9 +78,9 @@ ansible-playbook site.yml
 ansible-playbook --vault-id @prompt site.yml
 ```
 
-# 
+## Deployment
 
-demo site is deployed using [Cloud Alchemy](https://github.com/cloudalchemy) ansible roles.
+This demo site is deployed using [Cloud Alchemy](https://github.com/cloudalchemy) Ansible roles.
 
 [![DigitalOcean](https://snapshooter.io/powered_by_digital_ocean.png)](https://digitalocean.com)
 
